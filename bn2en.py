@@ -1,7 +1,10 @@
+import torch
 from normalizer import normalize
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
 
-model = AutoModelForSeq2SeqLM.from_pretrained("csebuetnlp/banglat5_nmt_bn_en")
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+model = AutoModelForSeq2SeqLM.from_pretrained("csebuetnlp/banglat5_nmt_bn_en").to(device)
 tokenizer = AutoTokenizer.from_pretrained("csebuetnlp/banglat5_nmt_bn_en", use_fast=False)
 
 
