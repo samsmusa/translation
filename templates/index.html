@@ -8,8 +8,8 @@
 </head>
 <body>
 <!-- Checkout Section: Simple Box -->
-<div class="bg-gray-100 dark:bg-gray-900 dark:text-gray-100">
-    <div class="container mx-auto px-4 py-16 lg:px-8 lg:py-32 xl:max-w-7xl">
+<div class="bg-gray-100 h-screen dark:bg-gray-900 dark:text-gray-100">
+    <div class="container mx-auto px-4 py-16 lg:px-8 lg:py-16 xl:max-w-7xl">
         <!-- Box -->
         <div
                 class="flex flex-col overflow-hidden rounded-lg bg-white shadow-sm dark:bg-gray-800 dark:text-gray-100"
@@ -55,66 +55,67 @@
             <!-- END Box -->
         </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
-    <script>
-        async function apiPost(url = "", data = {}) {
-            const response = await fetch(url, {
-                method: "POST",
-                mode: "cors",
-                cache: "no-cache",
-                credentials: "same-origin",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                redirect: "follow",
-                referrerPolicy: "no-referrer",
-                body: JSON.stringify(data),
-            });
-            return response.json();
-        }
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
+<script>
+    async function apiPost(url = "", data = {}) {
+        const response = await fetch(url, {
+            method: "POST",
+            mode: "cors",
+            cache: "no-cache",
+            credentials: "same-origin",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            redirect: "follow",
+            referrerPolicy: "no-referrer",
+            body: JSON.stringify(data),
+        });
+        return response.json();
+    }
 
-        function convertData(form) {
-            const formData = new FormData(form);
-            const formObject = {};
+    function convertData(form) {
+        const formData = new FormData(form);
+        const formObject = {};
 
-            formData.forEach((value, key) => {
-                formObject[key] = value;
-            });
+        formData.forEach((value, key) => {
+            formObject[key] = value;
+        });
 
-            return formObject
-        }
+        return formObject
+    }
 
-        function handleSubmit(event) {
-            event.preventDefault();
-            const data = convertData(form)
-            return onSubmit(data)
-        }
+    function handleSubmit(event) {
+        event.preventDefault();
+        const data = convertData(form)
+        return onSubmit(data)
+    }
 
-        function formatOutput(data) {
-            const outputEL = document.getElementById("output")
-            outputEL.innerText = data?.text
-            var textWrapper = document.querySelector('.custom');
-            textWrapper.innerHTML = textWrapper.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
-            anime.timeline({loop: false})
-                .add({
-                    targets: '.custom .letter',
-                    translateX: [40, 0],
-                    translateZ: 0,
-                    opacity: [0, 1],
-                    easing: "easeOutExpo",
-                    duration: 1200,
-                    delay: (el, i) => 500 + 30 * i
-                })
-        }
+    function formatOutput(data) {
+        const outputEL = document.getElementById("output")
+        outputEL.innerText = data?.text
+        var textWrapper = document.querySelector('.custom');
+        textWrapper.innerHTML = textWrapper.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
+        anime.timeline({loop: false})
+            .add({
+                targets: '.custom .letter',
+                translateX: [40, 0],
+                translateZ: 0,
+                opacity: [0, 1],
+                easing: "easeOutExpo",
+                duration: 1200,
+                delay: (el, i) => 500 + 30 * i
+            })
+    }
 
-        async function onSubmit(data) {
-            console.log(data)
-            const res = await apiPost("/translate", data)
-            formatOutput(res)
-        }
+    async function onSubmit(data) {
+        console.log(data)
+        const res = await apiPost("/translate", data)
+        formatOutput(res)
+    }
 
-        const form = document.getElementById("form");
-        form.addEventListener("submit", handleSubmit);
-    </script>
+    const form = document.getElementById("form");
+    form.addEventListener("submit", handleSubmit);
+</script>
 </body>
 </html>
