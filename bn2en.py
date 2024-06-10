@@ -27,7 +27,7 @@ def model_output(texts: List[str]) -> str:
         normalized_texts, return_tensors="pt", padding=True, truncation=True
     ).to(device)
     generated_tokens = model.generate(inputs["input_ids"])
-    response = tokenizer.batch_decode(generated_tokens)[0]
+    response = tokenizer.batch_decode(generated_tokens, skip_special_tokens=True)
     out = ". ".join(response)
     return str(out)
 
