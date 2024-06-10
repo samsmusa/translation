@@ -1,6 +1,7 @@
 import torch
 from normalizer import normalize
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
+from typing import List
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 # device = torch.device("cpu")
@@ -20,17 +21,19 @@ def chunk_text(text):
     return text.split("।")
 
 
-def model_output(text: str) -> str:
-    input_ids = tokenizer(normalize(text), return_tensors="pt").input_ids.to(device)
-    generated_tokens = model.generate(input_ids)
+def model_output(texts: List[str]) -> str:
+    normalized_texts = [normalize(text) for text in texts]
+    inputs = tokenizer(
+        normalized_texts, return_tensors="pt", padding=True, truncation=True
+    ).to(device)
+    generated_tokens = model.generate(inputs["input_ids"])
     response = tokenizer.batch_decode(generated_tokens)[0]
-    return str(response)
+    out = ". ".join(response)
+    return str(out)
 
 
 def translate(text):
-    response = ""
     chunks = chunk_text(text)
-    for chunk in chunks:
-        response = response + model_output(chunk)
+    response = model_output(chunks)
 
     return clean_text(response)
