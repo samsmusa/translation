@@ -9,6 +9,8 @@
 <body>
 <!-- Checkout Section: Simple Box -->
 <div class="bg-gray-100 h-screen dark:bg-gray-900 dark:text-gray-100">
+
+
     <div class="container mx-auto px-4 py-16 lg:px-8 lg:py-16 xl:max-w-7xl">
         <!-- Box -->
         <div
@@ -23,6 +25,25 @@
                         TRANSLATION
                     </h6>
 
+
+                    <div class="flex items-center gap-8  my-2">
+                        <label class="inline-flex items-center">
+                            <input type="radio" id="e2b" name="vehicle"
+                                   class="w-5 h-5 text-red-600"/>
+                            <span class="ml-2 text-blue-600">
+                EN2BN
+            </span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input checked type="radio" name="vehicle"
+                                   class="w-5 h-5 text-red-600"/>
+                            <span class="ml-2 text-green-600">
+                    BN2EN
+                </span>
+                        </label>
+                    </div>
+
+
                     <div class="space-y-6">
                         <form id="form" class="space-y-6">
                             <div
@@ -30,7 +51,7 @@
                             >
                                 <div class="space-y-1">
                 <textarea
-                        rows="20"
+                        rows="10"
                         name="text"
                         placeholder="Enter your Text"
                         class="block w-full rounded-lg border border-gray-200 px-5 py-3 leading-6 placeholder-gray-500 focus:border-blue-500 focus:ring focus:ring-blue-500/50 dark:border-gray-600 dark:bg-gray-800 dark:placeholder-gray-400 dark:focus:border-blue-500"
@@ -38,9 +59,10 @@
                                 </div>
 
                             </div>
-                            <div id="output"
-                                 class="custom space-y-6 rounded border border-gray-200 bg-gray-50 p-4 dark:border-gray-700/75 dark:bg-gray-900/50"
+                            <div
+                                 class="space-y-6 overflow-auto h-40 rounded border border-gray-200 bg-gray-50 p-4 dark:border-gray-700/75 dark:bg-gray-900/50"
                             >
+                                <p class="custom" id="output"></p>
                             </div>
                             <button
                                     type="submit"
@@ -103,14 +125,18 @@
                 translateZ: 0,
                 opacity: [0, 1],
                 easing: "easeOutExpo",
-                duration: 1200,
-                delay: (el, i) => 500 + 30 * i
+                duration: 600,
+                delay: (el, i) => 200 + 10 * i
             })
     }
 
     async function onSubmit(data) {
-        console.log(data)
-        const res = await apiPost("/translate", data)
+        const e2b = document.getElementById("e2b")
+        let url = "/translate/en"
+        if (e2b.checked) {
+            url = "/translate/bn"
+        }
+        const res = await apiPost(url, data)
         formatOutput(res)
     }
 
