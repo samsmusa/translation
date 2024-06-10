@@ -21,7 +21,7 @@ def chunk_text(text):
 
 
 def model_output(text: str) -> str:
-    input_ids = tokenizer(normalize(text), return_tensors="pt").input_ids
+    input_ids = tokenizer(normalize(text), return_tensors="pt").input_ids.to(device)
     generated_tokens = model.generate(input_ids)
     response = tokenizer.batch_decode(generated_tokens)[0]
     return str(response)
